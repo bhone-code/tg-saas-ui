@@ -1,120 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>=
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Telegram Admin Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>MyShop AI SaaS - Control Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+<body class="bg-[#0b0f19] text-gray-200 min-h-screen flex flex-col justify-between">
 
-    <div class="max-w-md mx-auto min-h-screen bg-gray-900 shadow-2xl flex flex-col">
-        
-        <header class="bg-indigo-600 p-4 text-white flex justify-between items-center sticky top-0 z-50">
-            <div>
-                <h1 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-shop text-amber-400"></i> MyShop AI SaaS
-                </h1>
-                <p class="text-xs text-indigo-200">Telegram Control Panel</p>
-            </div>
-            <span class="bg-green-500 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
-                <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> Supabase Live
-            </span>
-        </header>
+    <header class="bg-[#131926] border-b border-gray-800 p-4 flex justify-between items-center sticky top-0 z-50">
+        <div>
+            <h1 class="text-white font-bold text-base flex items-center gap-2">
+                🏪 MyOrder AI 
+            </h1>
+            <p class="text-xs text-gray-400 mt-0.5">Telegram Control Panel</p>
+        </div>
+        <span class="bg-green-500/10 text-green-400 border border-green-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm">
+            <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Supabase Live
+        </span>
+    </header>
 
-        <main class="flex-1 p-4 pb-24 space-y-6">
+    <main class="flex-1 overflow-y-auto max-w-md mx-auto w-full">
 
+        <div id="order-view" class="view-section p-4 space-y-5 pb-24 animate-fadeIn">
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <div class="bg-[#131926]/60 border border-gray-800/80 rounded-xl p-3.5 shadow-md">
                     <p class="text-xs text-gray-400">ယနေ့အော်ဒါစုစုပေါင်း</p>
-                    <p class="text-xl font-bold text-indigo-400">၁၅ ခု</p>
+                    <p class="text-xl font-bold text-white mt-1">၁၅ ခု</p>
                 </div>
-                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <div class="bg-[#131926]/60 border border-gray-800/80 rounded-xl p-3.5 shadow-md">
                     <p class="text-xs text-gray-400">စုစုပေါင်းရောင်းရငွေ</p>
-                    <p class="text-xl font-bold text-emerald-400">၃၇၅,၀၀၀ က်ပ္</p>
+                    <p class="text-xl font-bold text-green-400 mt-1">၃၅၅,၀၀၀ ကျပ်</p>
                 </div>
             </div>
 
-            <section class="space-y-3">
-                <h2 class="text-base font-semibold flex items-center gap-2 text-gray-300">
-                    <i class="fa-solid fa-list-check text-indigo-400"></i> ဝင်လာသော အော်ဒါဇယား
-                </h2>
-                
-                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 space-y-3">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-bold text-gray-200">ကိုမောင်မောင် (TG-9821)</h3>
-                            <p class="text-xs text-gray-400">09 777 666 555</p>
-                        </div>
-                        <span class="bg-amber-500/20 text-amber-400 text-xs px-2 py-1 rounded border border-amber-500/30">
-                            စိစစ်ဆဲ (Pending)
-                        </span>
-                    </div>
-                    
-                    <div class="bg-gray-900 p-3 rounded-lg text-xs space-y-1 text-gray-300">
-                        <p class="font-medium text-indigo-300">မှာယူသည့်ပစ္စည်း -</p>
-                        <p>• Oversized T-Shirt (Black - L) x 1</p>
-                        <p class="mt-2 text-gray-400"><i class="fa-solid fa-location-dot"></i> လိပ်စာ: လှိုင်မြို့နယ်၊ ရန်ကုန်။</p>
-                    </div>
+            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider">
+                ⋮☰ ဝင်လာသော အော်ဒါဇယား
+            </h3>
 
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="alert('Order Approved!')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-2 rounded-lg transition">
-                            အော်ဒါလက်ခံမည်
-                        </button>
-                        <button class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 rounded-lg">
-                            ပြေစာကြည့်ရန်
-                        </button>
+            <div class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-3 shadow-xl">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="text-white font-bold text-base">ကိုမောင်မောင် (TG-9821)</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">09 777 666 555</p>
+                    </div>
+                    <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs px-2.5 py-1 rounded-full font-medium">
+                        စိစစ်ဆဲ (Pending)
+                    </span>
+                </div>
+
+                <div class="bg-[#0b0f19] border border-gray-800/60 rounded-xl p-3 text-sm space-y-2">
+                    <p class="text-gray-400 font-medium">မှာယူသည့်ပစ္စည်း -</p>
+                    <p class="text-gray-200 pl-2">• Oversized T-Shirt (Black - L) x 1</p>
+                    <p class="text-gray-200 flex items-start gap-1 mt-1">
+                        <span>📍</span> <span class="text-gray-300">လိပ်စာ: လှိုင်မြို့နယ်၊ ရန်ကုန်။</span>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 pt-1">
+                    <button class="col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 cursor-pointer">
+                        အော်ဒါလက်ခံမည်
+                    </button>
+                    <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2.5 rounded-xl transition text-sm active:scale-95 cursor-pointer">
+                        ငြင်းပယ်ရန်
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider pt-2">
+                ➕ ကုန်ပစ္စည်းအသစ်တင်ရန်
+            </h3>
+            <div class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-4 shadow-xl">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">ကုန်ပစ္စည်းအမည်</label>
+                    <input type="text" placeholder="ဥပမာ - Hoodie" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm placeholder-gray-600">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">စျေးနှုန်း</label>
+                        <input type="number" value="25000" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">လက်ကျန်</label>
+                        <input type="number" value="50" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
                     </div>
                 </div>
-            </section>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 mt-2 cursor-pointer">
+                    ✨ ပစ္စည်းအသစ်စာရင်းသွင်းမည်
+                </button>
+            </div>
+        </div>
 
-            <section class="space-y-3">
-                <h2 class="text-base font-semibold flex items-center gap-2 text-gray-300">
-                    <i class="fa-solid fa-boxes-stacked text-indigo-400"></i> ကုန်ပစ္စည်းအသစ်တင်ရန်
-                </h2>
-                
-                <form class="bg-gray-800 p-4 rounded-xl border border-gray-700 space-y-3" onsubmit="event.preventDefault(); alert('ထည့်သွင်းပြီးပါပြီ!');">
+        <div id="product-view" class="view-section hidden p-4 space-y-4 pb-24 animate-fadeIn">
+            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider mt-2">
+                📦 လက်ကျန် ကုန်ပစ္စည်းစာရင်း
+            </h3>
+            
+            <div class="bg-[#131926] border border-gray-800 rounded-xl p-3.5 flex items-center justify-between shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-[#0b0f19] border border-gray-800 rounded-lg flex items-center justify-center text-xl">👕</div>
                     <div>
-                        <label class="block text-xs text-gray-400 mb-1">ကုန်ပစ္စည်းအမည်</label>
-                        <input type="text" placeholder="ဥပမာ - Hoodie" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200">
+                        <h4 class="text-white font-medium text-sm">Oversized T-Shirt (Black)</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">၂၅,၀၀၀ ကျပ်</p>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1">ဈေးနှုန်း</label>
-                            <input type="number" placeholder="25000" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1">လက်ကျန်</label>
-                            <input type="number" placeholder="50" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200">
-                        </div>
+                </div>
+                <div class="text-right">
+                    <span class="bg-green-500/10 text-green-400 border border-green-500/20 text-[11px] px-2.5 py-0.5 rounded-full font-bold">လက်ကျန် ၅၀</span>
+                    <button class="block text-xs text-blue-400 mt-2 ml-auto hover:underline cursor-pointer">✏️ ပြင်ရန်</button>
+                </div>
+            </div>
+            
+            <div class="bg-[#131926] border border-gray-800 rounded-xl p-3.5 flex items-center justify-between shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-[#0b0f19] border border-gray-800 rounded-lg flex items-center justify-center text-xl">🧥</div>
+                    <div>
+                        <h4 class="text-white font-medium text-sm">Hoodie (Winter Edition)</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">၃၅,၀၀0 ကျပ်</p>
                     </div>
+                </div>
+                <div class="text-right">
+                    <span class="bg-red-500/10 text-red-400 border border-red-500/20 text-[11px] px-2.5 py-0.5 rounded-full font-bold">လက်ကျန် ၃ (နည်းနေပြီ!)</span>
+                    <button class="block text-xs text-blue-400 mt-2 ml-auto hover:underline cursor-pointer">✏️ ပြင်ရန်</button>
+                </div>
+            </div>
+        </div>
 
-                    <button type="submit" class="w-full bg-emerald-600 text-white text-sm font-bold py-2.5 rounded-lg">
-                        ကုန်ပစ္စည်းစာရင်းထဲသို့ ထည့်မည်
-                    </button>
-                </form>
-            </section>
+        <div id="settings-view" class="view-section hidden p-4 space-y-4 pb-24 animate-fadeIn">
+            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider mt-2">
+                ⚙️ စနစ် ဆက်တင်များ
+            </h3>
+            
+            <div class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-4 shadow-xl">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">ဆိုင်အမည် (Store Name)</label>
+                    <input type="text" value="MyShop AI SaaS" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Google Sheet Apps Script URL</label>
+                    <input type="text" placeholder="https://script.google.com/macros/s/..." class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm placeholder-gray-700">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Gemini API Key (စနစ်ဦးနှောက်သော့)</label>
+                    <input type="password" value="AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-gray-500 focus:outline-none focus:border-blue-500 text-sm select-all">
+                </div>
+                <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 mt-2 cursor-pointer">
+                    💾 ဆက်တင်များအားလုံးသိမ်းဆည်းမည်
+                </button>
+            </div>
+        </div>
 
-        </main>
+    </main>
 
-        <nav class="bg-gray-800 border-t border-gray-700 p-2 fixed bottom-0 max-w-md w-full flex justify-around items-center text-gray-400 text-xs">
-            <button class="flex flex-col items-center gap-1 text-indigo-400">
-                <i class="fa-solid fa-receipt text-lg"></i>
-                <span>အော်ဒါဇယား</span>
+    <footer class="bg-[#131926]/95 border-t border-gray-800 backdrop-blur-md fixed bottom-0 left-0 right-0 p-2 z-50">
+        <div class="max-w-md mx-auto grid grid-cols-3 text-center">
+            <button id="tab-order" class="flex flex-col items-center justify-center py-1 text-blue-500 transition active:scale-90 cursor-pointer">
+                <span class="text-xl">📋</span>
+                <span class="text-[10px] font-medium mt-1">အော်ဒါဇယား</span>
             </button>
-            <button class="flex flex-col items-center gap-1">
-                <i class="fa-solid fa-box text-lg"></i>
-                <span>ပစ္စည်းစာရင်း</span>
+            
+            <button id="tab-product" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
+                <span class="text-xl">📦</span>
+                <span class="text-[10px] font-medium mt-1">ပစ္စည်းစာရင်း</span>
             </button>
-            <button class="flex flex-col items-center gap-1">
-                <i class="fa-solid fa-gear text-lg"></i>
-                <span>ဆက်တင်</span>
+            
+            <button id="tab-settings" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
+                <span class="text-xl">⚙️</span>
+                <span class="text-[10px] font-medium mt-1">ဆက်တင်</span>
             </button>
-        </nav>
+        </div>
+    </footer>
 
-    </div>
+    <script>
+        function switchTab(activeViewId, activeTabId) {
+            // ၁။ View စာမျက်နှာ အားလုံးကို အရင်ဖျောက်လိုက်ခြင်း
+            document.querySelectorAll('.view-section').forEach(view => {
+                view.classList.add('hidden');
+            });
+            // ၂။ မိမိနှိပ်လိုက်တဲ့ View စာမျက်နှာ တစ်ခုတည်းကိုပဲ ပြန်ဖော်ပြခြင်း
+            document.getElementById(activeViewId).classList.remove('hidden');
+
+            // ၃။ အောက်ခြေခလုတ်တွေရဲ့ အရောင်ကို အပြာရောင်/မီးခိုးရောင် အော်တိုလဲလှယ်ပေးခြင်း
+            const tabs = ['tab-order', 'tab-product', 'tab-settings'];
+            tabs.forEach(tabId => {
+                const tabBtn = document.getElementById(tabId);
+                if (tabId === activeTabId) {
+                    tabBtn.classList.remove('text-gray-400');
+                    tabBtn.classList.add('text-blue-500');
+                } else {
+                    tabBtn.classList.remove('text-blue-500');
+                    tabBtn.classList.add('text-gray-400');
+                }
+            });
+        }
+        // ခလုတ်တစ်ခုချင်းစီကို Event Listener စနစ်ဖြင့် နှိပ်ရင်ပြောင်းရန် အမိန့်ပေးခြင်း
+        document.getElementById('tab-order').addEventListener('click', () => switchTab('order-view', 'tab-order'));
+        document.getElementById('tab-product').addEventListener('click', () => switchTab('product-view', 'tab-product'));
+        document.getElementById('tab-settings').addEventListener('click', () => switchTab('settings-view', 'tab-settings'));
+    </script>
 
 </body>
 </html>
