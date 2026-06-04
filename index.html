@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyShop AI SaaS - Control Panel</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -70,7 +70,7 @@
                     <div class="col-span-2">
                         <label class="block text-xs font-medium text-gray-400 mb-1.5">စျေးနှုန်း (ကျပ်)</label>
                         <input type="number" id="p-price" required placeholder="ဥပမာ - ၅၀၀၀" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                        </div>
+                    </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1.5">အီမိုဂျီ</label>
                         <input type="text" id="p-emoji" value="🍗" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-center text-white focus:outline-none focus:border-blue-500 text-sm">
@@ -134,7 +134,9 @@
     </footer>
 
     <script>
-        // 👇 အဓိက အသက်ကယ်ဆွဲချက် - ခလုတ်နှိပ်စနစ်ကို အပေါ်ဆုံးသို့ တင်ထားခြင်းကြောင့် ဘယ်တော့မှ Freeze မဖြစ်နိုင်တော့ပါ
+        let supabaseClient = null;
+
+        // 🎯 Tab ပြောင်းလဲခြင်း စနစ် (ဘယ်တော့မှ Freeze မဖြစ်စေရန် ထိပ်ဆုံးတင်ထားသည်)
         function switchTab(activeViewId, activeTabId) {
             document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
             const targetView = document.getElementById(activeViewId);
@@ -154,16 +156,12 @@
             });
         }
 
-        // စာမျက်နှာပွင့်တာနဲ့ ခလုတ်တွေကို အတင်းအဓမ္မ ချိတ်ဆက်ခြင်း
-        setTimeout(() => {
+        // စနစ်တစ်ခုလုံးကို စတင်နှိုးဆွမည့် ပင်မလုပ်ဆောင်ချက်
+        function startAppEngine() {
             document.getElementById('tab-order')?.addEventListener('click', () => switchTab('order-view', 'tab-order'));
             document.getElementById('tab-product')?.addEventListener('click', () => switchTab('product-view', 'tab-product'));
             document.getElementById('tab-settings')?.addEventListener('click', () => switchTab('settings-view', 'tab-settings'));
-        }, 100);
 
-        let supabaseClient = null;
-
-        document.addEventListener("DOMContentLoaded", () => {
             const url = localStorage.getItem("sb_url");
             const key = localStorage.getItem("sb_key");
             const sheet = localStorage.getItem("sheet_url");
@@ -175,9 +173,10 @@
             if(gemini) document.getElementById("set-gemini").value = gemini;
 
             if (url && key) {
-                // 👇 try...catch ဖြင့် အုပ်ထားခြင်းကြောင့် သော့လိပ်စာမှားရင် UI မသေတော့ဘဲ အမှားစာတန်း လှလှလေး ပေါ်လာပါမည်
                 try {
-                    if(!url.startsWith('http')) throw new Error("URL ပုံစံ မှားယွင်းနေပါသည်။ (ဥပမာ - https:// ကျန်ခဲ့ခြင်း)");
+                    if(typeof supabase === 'undefined') {
+                        throw new Error("Supabase Library ကို ရှာမတွေ့ပါ။ CDN လင့်ခ် ချို့ယွင်းနေပါသည်။");
+                    }
                     supabaseClient = supabase.createClient(url, key);
                     updateStatus(true);
                     loadOrders();
@@ -189,8 +188,14 @@
             } else {
                 showConnectionError("ဆက်တင်ထဲတွင် Supabase URL နှင့် Key ချိတ်ဆက်ပေးရန် လိုအပ်ပါသည်။");
             }
-        });
+        }
 
+        // DOMContentLoaded အချိန်ကိုက်မှု လွဲချော်ခြင်းအမှားအား ကျော်ဖြတ်ခြင်း
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", startAppEngine);
+        } else {
+            startAppEngine();
+        }
         function updateStatus(isOnline) {
             const statusEl = document.getElementById("db-status");
             if(!statusEl) return;
@@ -209,7 +214,7 @@
                 <div class="text-center py-8 px-4 space-y-4 bg-[#131926]/40 border border-dashed border-gray-800 rounded-2xl mx-2">
                     <p class="text-sm text-amber-400 font-medium">⚠️ ${msg}</p>
                     <button onclick="switchTab('settings-view', 'tab-settings')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 cursor-pointer">
-                        ⚙️ ဒီခလုတ်ကိုနှိပ်ပြီး ဆက်တင်သို့တိုက်ရိုက်သွားပြင်မည်
+                        ⚙️ ဆက်တင်သို့တိုက်ရိုက်သွားပြီး API သော့များပြင်မည်
                     </button>
                 </div>
             ;
@@ -254,9 +259,9 @@
                                 <h4 class="text-white font-bold text-base">${order.customer_name}</h4>
                                 <p class="text-xs text-gray-400 mt-0.5">${order.phone}</p>
                                 <p class="text-xs text-blue-400 font-medium mt-1">${order.telegram_username ? order.telegram_username : '@no_username'}</p>
-                            </div>
+                                </div>
                             <span class="text-xs px-2.5 py-1 rounded-full font-medium ${
-                                order.status === 'Pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                order.status === 'Pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 
                                 order.status === 'Accepted' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-800 text-gray-400'
                             }">${order.status}</span>
                         </div>
@@ -317,17 +322,16 @@
 
             loadOrders();
         }
-
         async function updateOrderStatus(id, newStatus) {
             const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
             if(!error) loadOrders();
         }
+
         async function loadProducts() {
             if(!supabaseClient) return;
             try {
                 const { data, error } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
                 if (error) throw error;
-
                 const container = document.getElementById("products-container");
                 if(data.length === 0) {
                     container.innerHTML = <p class="text-sm text-gray-500 text-center py-6">📦 ပစ္စည်းစာရင်း မရှိသေးပါ။ အောက်တွင် အသစ်ထည့်ပါ။</p>;
