@@ -38,11 +38,9 @@
                     <p id="total-revenue" class="text-xl font-bold text-green-400 mt-1">၀ ကျပ်</p>
                 </div>
             </div>
-
             <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider">
                 ⋮☰ ဝင်လာသော အော်ဒါဇယား
             </h3>
-
             <div id="orders-container" class="space-y-4">
                 <p class="text-sm text-gray-500 text-center py-6">အော်ဒါများ ဆွဲယူနေပါသည်...</p>
             </div>
@@ -52,45 +50,15 @@
             <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider mt-2">
                 📦 လက်ကျန် ကုန်ပစ္စည်းစာရင်း
             </h3>
-            
             <div id="products-container" class="space-y-3">
                 <p class="text-sm text-gray-500 text-center py-6">ပစ္စည်းစာရင်း ဆွဲယူနေပါသည်...</p>
             </div>
-
-            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider pt-4">
-                ➕ ကုန်ပစ္စည်းအသစ်တင်ရန်
-            </h3>
-
-            <form id="add-product-form" class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-4 shadow-xl">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">ကုန်ပစ္စည်းအမည်</label>
-                    <input type="text" id="p-name" required placeholder="ဥပမာ - ကြက်ကြော်" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="col-span-2">
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5">စျေးနှုန်း (ကျပ်)</label>
-                        <input type="number" id="p-price" required placeholder="ဥပမာ - ၅၀၀၀" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5">အီမိုဂျီ</label>
-                        <input type="text" id="p-emoji" value="🍗" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-center text-white focus:outline-none focus:border-blue-500 text-sm">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">အခြေခံလက်ကျန်အရေအတွက်</label>
-                    <input type="number" id="p-stock" required placeholder="၅၀" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 cursor-pointer">
-                    ✨ ပစ္စည်းအသစ်စာရင်းသွင်းမည်
-                </button>
-            </form>
         </div>
 
         <div id="settings-view" class="view-section hidden p-4 space-y-4 pb-24">
             <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider mt-2">
                 ⚙️ စနစ် ဆက်တင်များ
             </h3>
-            
             <div class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-4 shadow-xl">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1.5">Supabase Project URL</label>
@@ -105,7 +73,7 @@
                     <input type="text" id="set-sheet-url" placeholder="https://script.google.com/macros/s/..." class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Gemini API Key (စနစ်ဦးနှောက်သော့)</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Gemini API Key</label>
                     <input type="password" id="set-gemini" placeholder="AIzaSy..." class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
                 </div>
                 <button onclick="saveSettings()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 mt-2 cursor-pointer">
@@ -118,15 +86,15 @@
 
     <footer class="bg-[#131926]/95 border-t border-gray-800 backdrop-blur-md fixed bottom-0 left-0 right-0 p-2 z-50">
         <div class="max-w-md mx-auto grid grid-cols-3 text-center">
-            <button id="tab-order" class="flex flex-col items-center justify-center py-1 text-blue-500 transition active:scale-90 cursor-pointer">
+            <button id="tab-order" onclick="switchTab('order-view', 'tab-order')" class="flex flex-col items-center justify-center py-1 text-blue-500 transition active:scale-90 cursor-pointer">
                 <span class="text-xl">📋</span>
                 <span class="text-[10px] font-medium mt-1">အော်ဒါဇယား</span>
             </button>
-            <button id="tab-product" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
+            <button id="tab-product" onclick="switchTab('product-view', 'tab-product')" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
                 <span class="text-xl">📦</span>
                 <span class="text-[10px] font-medium mt-1">ပစ္စည်းစာရင်း</span>
             </button>
-            <button id="tab-settings" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
+            <button id="tab-settings" onclick="switchTab('settings-view', 'tab-settings')" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
                 <span class="text-xl">⚙️</span>
                 <span class="text-[10px] font-medium mt-1">ဆက်တင်</span>
             </button>
@@ -136,32 +104,29 @@
     <script>
         let supabaseClient = null;
 
-        // 🎯 Tab ပြောင်းလဲခြင်း စနစ် (ဘယ်တော့မှ Freeze မဖြစ်စေရန် ထိပ်ဆုံးတင်ထားသည်)
-        function switchTab(activeViewId, activeTabId) {
-            document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
-            const targetView = document.getElementById(activeViewId);
+        function switchTab(viewId, tabId) {
+            const views = document.querySelectorAll('.view-section');
+            for(let i=0; i<views.length; i++) {
+                views[i].classList.add('hidden');
+            }
+            const targetView = document.getElementById(viewId);
             if(targetView) targetView.classList.remove('hidden');
 
             const tabs = ['tab-order', 'tab-product', 'tab-settings'];
-            tabs.forEach(tabId => {
-                const tabBtn = document.getElementById(tabId);
-                if(!tabBtn) return;
-                if (tabId === activeTabId) {
-                    tabBtn.classList.remove('text-gray-400');
-                    tabBtn.classList.add('text-blue-500');
+            for(let i=0; i<tabs.length; i++) {
+                const btn = document.getElementById(tabs[i]);
+                if(!btn) continue;
+                if (tabs[i] === tabId) {
+                    btn.classList.remove('text-gray-400');
+                    btn.classList.add('text-blue-500');
                 } else {
-                    tabBtn.classList.remove('text-blue-500');
-                    tabBtn.classList.add('text-gray-400');
+                    btn.classList.remove('text-blue-500');
+                    btn.classList.add('text-gray-400');
                 }
-            });
+            }
         }
 
-        // စနစ်တစ်ခုလုံးကို စတင်နှိုးဆွမည့် ပင်မလုပ်ဆောင်ချက်
         function startAppEngine() {
-            document.getElementById('tab-order')?.addEventListener('click', () => switchTab('order-view', 'tab-order'));
-            document.getElementById('tab-product')?.addEventListener('click', () => switchTab('product-view', 'tab-product'));
-            document.getElementById('tab-settings')?.addEventListener('click', () => switchTab('settings-view', 'tab-settings'));
-
             const url = localStorage.getItem("sb_url");
             const key = localStorage.getItem("sb_key");
             const sheet = localStorage.getItem("sheet_url");
@@ -175,7 +140,7 @@
             if (url && key) {
                 try {
                     if(typeof supabase === 'undefined') {
-                        throw new Error("Supabase Library ကို ရှာမတွေ့ပါ။ CDN လင့်ခ် ချို့ယွင်းနေပါသည်။");
+                        throw new Error("Supabase Library မပွင့်ပါ။");
                     }
                     supabaseClient = supabase.createClient(url, key);
                     updateStatus(true);
@@ -190,34 +155,34 @@
             }
         }
 
-        // DOMContentLoaded အချိန်ကိုက်မှု လွဲချော်ခြင်းအမှားအား ကျော်ဖြတ်ခြင်း
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", startAppEngine);
         } else {
             startAppEngine();
         }
+
         function updateStatus(isOnline) {
             const statusEl = document.getElementById("db-status");
             if(!statusEl) return;
             if(isOnline) {
                 statusEl.className = "bg-green-500/10 text-green-400 border border-green-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm";
-                statusEl.innerHTML = <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Supabase Live;
+                statusEl.innerHTML = `<span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Supabase Live`;
             } else {
                 statusEl.className = "bg-red-500/10 text-red-400 border border-red-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm";
-                statusEl.innerHTML = <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span> Offline;
+                statusEl.innerHTML = `<span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span> Offline`;
             }
         }
 
         function showConnectionError(msg) {
             updateStatus(false);
-            const errHtml = 
+            const errHtml = `
                 <div class="text-center py-8 px-4 space-y-4 bg-[#131926]/40 border border-dashed border-gray-800 rounded-2xl mx-2">
                     <p class="text-sm text-amber-400 font-medium">⚠️ ${msg}</p>
                     <button onclick="switchTab('settings-view', 'tab-settings')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 cursor-pointer">
                         ⚙️ ဆက်တင်သို့တိုက်ရိုက်သွားပြီး API သော့များပြင်မည်
                     </button>
                 </div>
-            ;
+            `;
             const orderContainer = document.getElementById("orders-container");
             const productContainer = document.getElementById("products-container");
             if(orderContainer) orderContainer.innerHTML = errHtml;
@@ -240,15 +205,10 @@
                 const { data, error } = await supabaseClient.from('orders').select('*').order('id', { ascending: false });
                 if (error) throw error;
 
-                const acceptedOrders = data.filter(o => o.status === 'Accepted');
-                const revenue = acceptedOrders.reduce((sum, order) => sum + (order.total_price || 0), 0);
-                
-                document.getElementById("total-orders-count").innerText = ${data.length} ခု;
-                document.getElementById("total-revenue").innerText = ${revenue.toLocaleString()} ကျပ်;
-
+                document.getElementById("total-orders-count").innerText = `${data.length} ခု`;
                 const container = document.getElementById("orders-container");
                 if(data.length === 0) {
-                    container.innerHTML = <p class="text-sm text-gray-500 text-center py-6">📥 ဝင်လာသော အော်ဒါမရှိသေးပါ။</p>;
+                    container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">📥 ဝင်လာသော အော်ဒါမရှိသေးပါ။</p>`;
                     return;
                 }
 
@@ -258,33 +218,9 @@
                             <div>
                                 <h4 class="text-white font-bold text-base">${order.customer_name}</h4>
                                 <p class="text-xs text-gray-400 mt-0.5">${order.phone}</p>
-                                <p class="text-xs text-blue-400 font-medium mt-1">${order.telegram_username ? order.telegram_username : '@no_username'}</p>
-                                </div>
-                            <span class="text-xs px-2.5 py-1 rounded-full font-medium ${
-                                order.status === 'Pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 
-                                order.status === 'Accepted' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-800 text-gray-400'
-                            }">${order.status}</span>
-                        </div>
-                        <div class="bg-[#0b0f19] border border-gray-800/60 rounded-xl p-3 text-sm space-y-2">
-                            <p class="text-gray-200 pl-2">• ${order.items}</p>
-                            <p class="text-xs text-green-400 font-medium pl-2">ကျသင့်ငွေ: ${(order.total_price || 0).toLocaleString()} ကျပ်</p>
-                            <p class="text-gray-200 flex items-start gap-1 mt-1"><span>📍</span> <span class="text-gray-300">လိပ်စာ: ${order.address}</span></p>
-                        </div>
-                        
-                        ${order.transaction_id || order.slip_amount ? 
-                            <div class="bg-blue-500/5 border border-blue-500/10 rounded-xl p-2.5 text-xs space-y-1">
-                                <p class="text-blue-400 font-medium flex items-center gap-1">🤖 AI Automated Slip Verified:</p>
-                                ${order.transaction_id ? <p class="text-gray-400">TxID: <span class="text-gray-200 font-mono select-all">${order.transaction_id}</span></p> : ''}
-                                ${order.slip_amount ? <p class="text-gray-400">Slip Amount: <span class="text-green-400 font-semibold">${order.slip_amount.toLocaleString()} ကျပ်</span></p> : ''}
                             </div>
-                         : ''}
-
-                        ${order.status === 'Pending' ? 
-                            <div class="grid grid-cols-3 gap-2 pt-1">
-                                <button onclick='acceptOrder(${JSON.stringify(order)})' class="col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition text-sm shadow-md active:scale-95 cursor-pointer">အော်ဒါလက်ခံမည်</button>
-                                <button onclick="updateOrderStatus(${order.id}, 'Rejected')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2 rounded-xl transition text-sm active:scale-95 cursor-pointer">ငြင်းပယ်ရန်</button>
-                            </div>
-                         : ''}
+                            <span class="text-xs px-2.5 py-1 rounded-full font-medium bg-green-500/10 text-green-400 border border-green-500/20">${order.status}</span>
+                        </div>
                     </div>
                 `).join('');
             } catch(e) {
@@ -292,96 +228,29 @@
             }
         }
 
-        async function acceptOrder(order) {
-            const { error } = await supabaseClient.from('orders').update({ status: 'Accepted' }).eq('id', order.id);
-            if(error) return;
-
-            const sheetUrl = localStorage.getItem("sheet_url");
-            if (sheetUrl && sheetUrl.trim() !== "") {
-                const payload = {
-                    order_id: order.id,
-                    customer_name: order.customer_name,
-                    phone: order.phone,
-                    telegram: order.telegram_username,
-                    items: order.items,
-                    total_price: order.total_price,
-                    transaction_id: order.transaction_id,
-                    slip_amount: order.slip_amount,
-                    address: order.address,
-                    date: new Date().toLocaleString()
-                };
-
-                fetch(sheetUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                }).then(() => console.log("➡️ Google Sheets Synced."))
-                .catch(err => console.error("Google Sheets Error:", err));
-            }
-
-            loadOrders();
-        }
-        async function updateOrderStatus(id, newStatus) {
-            const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
-            if(!error) loadOrders();
-        }
-
         async function loadProducts() {
             if(!supabaseClient) return;
             try {
                 const { data, error } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
                 if (error) throw error;
+
                 const container = document.getElementById("products-container");
                 if(data.length === 0) {
-                    container.innerHTML = <p class="text-sm text-gray-500 text-center py-6">📦 ပစ္စည်းစာရင်း မရှိသေးပါ။ အောက်တွင် အသစ်ထည့်ပါ။</p>;
+                    container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">📦 ပစ္စည်းစာရင်း မရှိသေးပါ။</p>`;
                     return;
                 }
 
-                container.innerHTML = data.map(p => 
+                container.innerHTML = data.map(p => `
                     <div class="bg-[#131926] border border-gray-800 rounded-xl p-3.5 flex items-center justify-between shadow-md">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 bg-[#0b0f19] border border-gray-800 rounded-lg flex items-center justify-center text-xl">${p.emoji || '🍗'}</div>
-                            <div>
-                                <h4 class="text-white font-medium text-sm">${p.name}</h4>
-                                <p class="text-xs text-gray-400 mt-0.5">${p.price.toLocaleString()} ကျပ်</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold ${p.stock <= 5 ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}">လက်ကျန် ${p.stock}</span>
-                            <button onclick="editStockPrompt(${p.id}, '${p.name}', ${p.stock})" class="block text-xs text-blue-400 mt-2 ml-auto hover:underline cursor-pointer">✏️ ပြင်ရန်</button>
+                        <div>
+                            <h4 class="text-white font-medium text-sm">${p.name}</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">${p.price} ကျပ်</p>
                         </div>
                     </div>
-                ).join('');
+                `).join('');
             } catch(e) {
                 console.error(e);
             }
-        }
-
-        document.getElementById("add-product-form")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            if(!supabaseClient) return;
-
-            const name = document.getElementById("p-name").value.trim();
-            const price = parseInt(document.getElementById("p-price").value);
-            const emoji = document.getElementById("p-emoji").value.trim();
-            const stock = parseInt(document.getElementById("p-stock").value);
-
-            const { error } = await supabaseClient.from('products').insert([{ name, price, emoji, stock }]);
-            if(!error) {
-                document.getElementById("add-product-form").reset();
-                document.getElementById("p-emoji").value = "🍗";
-                loadProducts();
-                alert("🎉 ကုန်ပစ္စည်းအသစ်ကို Database ထဲသို့ အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ!");
-            }
-        });
-
-        async function editStockPrompt(id, name, currentStock) {
-            const newStock = prompt("${name}" ၏ လက်ကျန်အရေအတွက်ကို အသစ်ပြင်ဆင်ရန် ရိုက်ထည့်ပါ -, currentStock);
-            if (newStock === null || newStock.trim() === "") return;
-            
-            const { error } = await supabaseClient.from('products').update({ stock: parseInt(newStock) }).eq('id', id);
-            if(!error) loadProducts();
         }
 
         function listenRealtime() {
