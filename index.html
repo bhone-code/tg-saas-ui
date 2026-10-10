@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Secret Note For You</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- မြန်မာဖောင့်နှင့် အလှဖောင့်များ ချိတ်ဆက်ခြင်း -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Sans+Myanmar:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
@@ -15,7 +14,6 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* နှလုံးသား Animation */
         .heart {
             position: fixed;
             top: -10vh;
@@ -31,7 +29,6 @@
             100% { transform: translateY(110vh); }
         }
 
-        /* ပုံများ Animation */
         .hero-img {
             opacity: 0;
             transform: translateY(50px) rotate(-5deg);
@@ -49,7 +46,6 @@
             to { opacity: 1; transform: translateY(0) rotate(var(--rotation)); }
         }
 
-        /* Scroll Animation */
         .reveal {
             opacity: 0;
             transform: translateY(80px);
@@ -59,7 +55,6 @@
             opacity: 1; transform: translateY(0);
         }
 
-        /* စာရွက်ဒီဇိုင်း (ပိုမို သေသပ်လှပအောင် ပြင်ဆင်ထားသည်) */
         .letter-paper {
             background: #fffdfa;
             box-shadow: 0px 15px 35px rgba(225, 172, 185, 0.2);
@@ -78,7 +73,7 @@
 
         .myanmar-text {
             font-family: 'Noto Sans Myanmar', sans-serif;
-            line-height: 2.2; /* စာကြောင်းကွာဟမှု ချဲ့ထားသည် */
+            line-height: 2.2;
             color: #4a4a4a;
         }
 
@@ -89,7 +84,6 @@
             60% {transform: translateY(-10px);}
         }
 
-        /* Music Button Design */
         .music-btn {
             position: fixed;
             bottom: 20px;
@@ -123,22 +117,18 @@
 </head>
 <body class="relative">
 
-    <!-- နောက်ခံ သီချင်း (music.mp3 ကို GitHub တွင် တင်ရန်) -->
     <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- သီချင်းဖွင့်မည့် ခလုတ် (Floating Button) -->
     <div id="musicBtn" class="music-btn" onclick="toggleMusic()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
         </svg>
     </div>
 
-    <!-- Falling Hearts -->
     <div id="hearts-container"></div>
 
-    <!-- 1. HERO SECTION -->
     <div class="min-h-screen flex flex-col items-center justify-center relative z-10 p-4 pt-16">
         <div class="flex flex-wrap justify-center gap-6 md:gap-12 w-full max-w-4xl">
             <div class="hero-img w-48 md:w-64" style="--rotation: -4deg;">
@@ -161,7 +151,6 @@
         </div>
     </div>
 
-    <!-- 2. SECRET NOTE SECTION -->
     <div class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 reveal">
         <h2 class="text-4xl md:text-5xl text-rose-800 font-bold mb-10 font-['Dancing_Script']">A Secret Note</h2>
         
@@ -178,7 +167,6 @@
                 <p class="mb-6">အမှန်အတိုင်း ပြောရရင်တော့... အခါခါ စိတ်ထဲမှာ မတန်ဘူးလို့ ခံစားရတာမျိုး ရှိပါတယ်။ သူ့မှာ လူငယ်ဘဝ အပြည့်ရှိခဲ့ပြီး ရွေးချယ်စရာတွေ အများကြီးရှိခဲ့ပေမဲ့ ကျွန်တော့်ကိုပဲ ရွေးချယ်ခဲ့တာပါ။ သူဟာ ကျွန်တော့်ရဲ့ ဇနီးဖြစ်ရုံတင် မဟုတ်ပါဘူး။ သူဟာ ကျွန်တော့်ရဲ့ ဂုဏ်ယူမှု၊ ကျွန်တော့်ဘဝရဲ့ အကြီးမားဆုံး ကောင်းချီး ဖြစ်တာမို့ ကျွန်တော့်မှာရှိတဲ့ အရာအားလုံးနဲ့ ဘဝတစ်ခုလုံး ပေးဆပ်ပြီး ကာကွယ်ချစ်ခင်သွားမယ်ဆိုတဲ့ ကတိကိုထာဝရပေးပါတယ်။</p>
             </div>
 
-            <!-- အဆုံးသတ် နာမည်ကို ပိုမို ထင်ရှားအောင် ပြင်ဆင်ထားသည် -->
             <div class="mt-12 pt-6 border-t border-rose-100 flex flex-col items-end">
                 <p class="text-rose-400 font-['Playfair_Display'] italic text-lg">Forever Yours,</p>
                 <p class="font-['Dancing_Script'] text-5xl text-rose-600 mt-2 font-bold">Ko Ko</p>
@@ -186,7 +174,6 @@
         </div>
     </div>
 
-    <!-- 3. FINAL QUESTION SECTION -->
     <div class="py-24 flex flex-col items-center justify-center relative z-10 reveal">
         <p class="text-4xl md:text-6xl font-['Dancing_Script'] text-rose-700 font-bold text-center px-4">Will you be my forever?</p>
         <div class="mt-6 flex gap-2 text-rose-400">
@@ -195,7 +182,6 @@
     </div>
 
     <script>
-        // Hearts Animation
         const heartsContainer = document.getElementById('hearts-container');
         const heartSymbols = ['❤️', '💖', '💕', '🌸', '✨'];
         
@@ -211,7 +197,6 @@
         }
         setInterval(createHeart, 500);
 
-        // Scroll Reveal
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -225,7 +210,6 @@
         }
         window.addEventListener("scroll", reveal);
 
-        // Music Logic
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let isPlaying = false;
@@ -243,7 +227,6 @@
             isPlaying = !isPlaying;
         }
 
-        // Tap to Reveal (Plays music and scrolls slightly)
         function toggleMusicAndScroll() {
             if(!isPlaying) toggleMusic();
             window.scrollBy({ top: window.innerHeight / 2, behavior: 'smooth' });
