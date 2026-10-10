@@ -3,377 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyShop AI SaaS - Control Panel</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <title>A Secret Note For You</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- မြန်မာဖောင့်နှင့် အလှဖောင့်များ ချိတ်ဆက်ခြင်း -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Sans+Myanmar:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            background-color: #fce4ec;
+            overflow-x: hidden;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* နှလုံးသား Animation */
+        .heart {
+            position: fixed;
+            top: -10vh;
+            transform: translateY(0);
+            animation: fall 10s linear infinite;
+            z-index: 0;
+            color: #ff80ab;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        @keyframes fall {
+            100% { transform: translateY(110vh); }
+        }
+
+        /* ပုံများ Animation */
+        .hero-img {
+            opacity: 0;
+            transform: translateY(50px) rotate(-5deg);
+            animation: fadeInUp 1.5s forwards;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: white;
+            padding: 10px;
+            padding-bottom: 30px;
+            border-radius: 4px;
+        }
+        .hero-img:nth-child(2) { animation-delay: 1.5s; transform: translateY(50px) rotate(3deg); }
+        .hero-img:nth-child(3) { animation-delay: 3s; transform: translateY(50px) rotate(-2deg); }
+        
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0) rotate(var(--rotation)); }
+        }
+
+        /* Scroll Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1.2s ease-out;
+        }
+        .reveal.active {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* စာရွက်ဒီဇိုင်း (ပိုမို သေသပ်လှပအောင် ပြင်ဆင်ထားသည်) */
+        .letter-paper {
+            background: #fffdfa;
+            box-shadow: 0px 15px 35px rgba(225, 172, 185, 0.2);
+            border-radius: 12px;
+            position: relative;
+        }
+        .letter-paper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #f4d3d9 31px, #f4d3d9 32px);
+            opacity: 0.5;
+            pointer-events: none;
+            border-radius: 12px;
+        }
+
+        .myanmar-text {
+            font-family: 'Noto Sans Myanmar', sans-serif;
+            line-height: 2.2; /* စာကြောင်းကွာဟမှု ချဲ့ထားသည် */
+            color: #4a4a4a;
+        }
+
+        .bounce { animation: bounce 2s infinite; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* Music Button Design */
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff4d6d;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            cursor: pointer;
+            z-index: 50;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        .music-btn.playing {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 77, 109, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body class="bg-[#0b0f19] text-gray-200 min-h-screen flex flex-col justify-between">
+<body class="relative">
 
-    <header class="bg-[#131926] border-b border-gray-800 p-4 flex justify-between items-center sticky top-0 z-50">
-        <div>
-            <h1 class="text-white font-bold text-base flex items-center gap-2">🏪 MyShop AI SaaS</h1>
-            <p class="text-xs text-gray-400 mt-0.5">Telegram Control Panel</p>
-        </div>
-        <span id="db-status" class="bg-red-500/10 text-red-400 border border-red-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm">
-            <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span> Offline
-        </span>
-    </header>
+    <!-- နောက်ခံ သီချင်း (music.mp3 ကို GitHub တွင် တင်ရန်) -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
 
-    <main class="flex-1 overflow-y-auto max-w-md mx-auto w-full">
+    <!-- သီချင်းဖွင့်မည့် ခလုတ် (Floating Button) -->
+    <div id="musicBtn" class="music-btn" onclick="toggleMusic()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+        </svg>
+    </div>
 
-        <div id="order-view" class="view-section p-4 space-y-5 pb-24">
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-[#131926]/60 border border-gray-800/80 rounded-xl p-3.5 shadow-md">
-                    <p class="text-xs text-gray-400">ယနေ့အော်ဒါစုစုပေါင်း</p>
-                    <p id="total-orders-count" class="text-xl font-bold text-white mt-1">၀ ခု</p>
-                </div>
-                <div class="bg-[#131926]/60 border border-gray-800/80 rounded-xl p-3.5 shadow-md">
-                    <p class="text-xs text-gray-400">စုစုပေါင်းရောင်းရငွေ</p>
-                    <p id="total-revenue" class="text-xl font-bold text-green-400 mt-1">၀ ကျပ်</p>
-                </div>
+    <!-- Falling Hearts -->
+    <div id="hearts-container"></div>
+
+    <!-- 1. HERO SECTION -->
+    <div class="min-h-screen flex flex-col items-center justify-center relative z-10 p-4 pt-16">
+        <div class="flex flex-wrap justify-center gap-6 md:gap-12 w-full max-w-4xl">
+            <div class="hero-img w-48 md:w-64" style="--rotation: -4deg;">
+                <img src="6204081556612125657.jpg" alt="The Beginning" class="w-full h-auto object-cover rounded" onerror="this.src='https://via.placeholder.com/300x400?text=Photo+1'">
+                <p class="text-center font-['Dancing_Script'] text-2xl text-rose-600 mt-4 font-bold">The Beginning</p>
             </div>
-
-            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider">
-                ⋮☰ ဝင်လာသော အော်ဒါဇယား
-            </h3>
-
-            <div id="orders-container" class="space-y-4">
-                <p class="text-sm text-gray-500 text-center py-6">အော်ဒါများ ဆွဲယူနေပါသည်...</p>
+            <div class="hero-img w-48 md:w-64" style="--rotation: 3deg;">
+                <img src="6206113935136592544.jpg" alt="My Everything" class="w-full h-auto object-cover rounded" onerror="this.src='https://via.placeholder.com/300x400?text=Photo+2'">
+                <p class="text-center font-['Dancing_Script'] text-2xl text-rose-600 mt-4 font-bold">My Everything</p>
+            </div>
+            <div class="hero-img w-48 md:w-64" style="--rotation: -2deg;">
+                <img src="6206113935136592545.jpg" alt="Forever" class="w-full h-auto object-cover rounded" onerror="this.src='https://via.placeholder.com/300x400?text=Photo+3'">
+                <p class="text-center font-['Dancing_Script'] text-2xl text-rose-600 mt-4 font-bold">Forever</p>
             </div>
         </div>
 
-        <div id="product-view" class="view-section hidden p-4 space-y-4 pb-24">
-            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider mt-2">
-                📦 လက်ကျန် ကုန်ပစ္စည်းစာရင်း
-            </h3>
+        <div class="absolute bottom-10 text-rose-500 flex flex-col items-center bounce cursor-pointer" onclick="toggleMusicAndScroll()" style="animation-delay: 5s; opacity: 0; animation: fadeIn 1s forwards 5s, bounce 2s infinite 5s;">
+            <p class="text-sm mb-2 uppercase tracking-widest font-semibold">Tap to Reveal</p>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </div>
+
+    <!-- 2. SECRET NOTE SECTION -->
+    <div class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 reveal">
+        <h2 class="text-4xl md:text-5xl text-rose-800 font-bold mb-10 font-['Dancing_Script']">A Secret Note</h2>
+        
+        <div class="letter-paper p-8 md:p-12 max-w-2xl w-full text-base md:text-lg mt-2">
+            <p class="font-['Noto_Sans_Myanmar'] text-xl md:text-2xl mb-6 text-rose-700 font-semibold text-center">"ကျွန်တော့်ရဲ့ မိန်းမလှလေး၊ ကျွန်တော့်ရဲ့ ဂုဏ်ယူရဆုံး ရတနာလေး" 🤍</p>
             
-            <div id="products-container" class="space-y-3">
-                <p class="text-sm text-gray-500 text-center py-6">ပစ္စည်းစာရင်း ဆွဲယူနေပါသည်...</p>
+            <div class="myanmar-text text-justify mt-8">
+                <p class="mb-6">လွန်ခဲ့တဲ့ နှစ်အနည်းငယ်ကသာ တစ်စုံတစ်ယောက်က ကျွန်တော့်လို လူတစ်ယောက် — သူများထက် ၁၁ နှစ် ပိုကြီးပြီး၊ အကျင့်စရိုက်တွေ ပုံသေဖြစ်နေကာ၊ အသက်ကြီးလာတာကို ငြိမ်သက်စွာ လက်ခံထားတဲ့သူတစ်ယောက်ဟာ — သူများနဲ့မတူ ထူးခြားလှပတဲ့ မိန်းကလေးတစ်ယောက်နဲ့ ဆုံစည်းရလိမ့်မယ်လို့ ပြောခဲ့ရင် ကျွန်တော် ရယ်မောပစ်မိမှာပါ။</p>
+                
+                <p class="mb-6">ဒါပေမဲ့ အခုတော့ ကျွန်တော့်ထက် ၁၁ နှစ် ငယ်တဲ့ ဇနီးလေးကို ငေးကြည့်ရင်း 'ငါ ဘဝဟောင်းက ဘာကောင်းမှုတွေ လုပ်ခဲ့လို့များ ဒီလို ကျေးဇူးတရားမျိုး ရရှိခဲ့ရတာလဲ' လို့ တွေးတောမိနေပါတယ်။ သူ့ကို ကြည့်လိုက်တိုင်း ကျွန်တော့်ရင်ထဲမှာ ဖခင်တစ်ယောက်လို နွေးထွေးတဲ့ မေတ္တာတရားတွေ တိုးဝင်လာတတ်ပါတယ် — သူ့ကို ရင်ခွင်ထဲ ထည့်ထားချင်စိတ်၊ ဒီကမ္ဘာကြီးရဲ့ အေးစက်တဲ့ လေပြင်းတွေဒဏ်ကနေ ကာကွယ်ပေးချင်စိတ်နဲ့ အဆုံးအစမရှိ အလိုလိုက်ချင်စိတ်တွေကို ဖြစ်ပေါ်စေတဲ့ နက်ရှိုင်းတဲ့ ကာကွယ်စောင့်ရှောက်လိုသော ချစ်ခြင်းမျိုးပါ။</p>
+
+                <p class="mb-6">ကျွန်တော်တို့ မင်္ဂလာမဆောင်ခင်က သူ့အရွယ်လေး အရမ်းငယ်သေးတာကို မြင်တော့ အိမ်ထောင်တစ်ခုကို ထိန်းသိမ်းရတဲ့ တာဝန်ဝတ္တရားတွေကို သူ နိုင်နင်းစွာ ထမ်းဆောင်နိုင်ပါ့မလားလို့ တွေးမိခဲ့ဖူးပါတယ်။ ဒါပေမဲ့ ကျွန်တော့်ရဲ့ ဇနီးအဖြစ် ကျွန်တော့်အိမ်ထဲကို လှမ်းဝင်လာတဲ့ စက္ကန့်ကစလို့ သူ ကျွန်တော့်ကို လုံးဝ အံ့အားသင့်သွားစေခဲ့ပါတယ်။ သူဟာ ကျွန်တော် စိတ်ကူးယဉ်ခဲ့ဖူးသမျှထဲမှာ အတော်ဆုံး အိမ်ရှင်မကောင်းတစ်ယောက်ပါပဲ။</p>
+
+                <p class="mb-6">အမှန်အတိုင်း ပြောရရင်တော့... အခါခါ စိတ်ထဲမှာ မတန်ဘူးလို့ ခံစားရတာမျိုး ရှိပါတယ်။ သူ့မှာ လူငယ်ဘဝ အပြည့်ရှိခဲ့ပြီး ရွေးချယ်စရာတွေ အများကြီးရှိခဲ့ပေမဲ့ ကျွန်တော့်ကိုပဲ ရွေးချယ်ခဲ့တာပါ။ သူဟာ ကျွန်တော့်ရဲ့ ဇနီးဖြစ်ရုံတင် မဟုတ်ပါဘူး။ သူဟာ ကျွန်တော့်ရဲ့ ဂုဏ်ယူမှု၊ ကျွန်တော့်ဘဝရဲ့ အကြီးမားဆုံး ကောင်းချီး ဖြစ်တာမို့ ကျွန်တော့်မှာရှိတဲ့ အရာအားလုံးနဲ့ ဘဝတစ်ခုလုံး ပေးဆပ်ပြီး ကာကွယ်ချစ်ခင်သွားမယ်ဆိုတဲ့ ကတိကိုထာဝရပေးပါတယ်။</p>
             </div>
 
-            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider pt-4">
-                ➕ ကုန်ပစ္စည်းအသစ်တင်ရန်
-            </h3>
-
-            <form id="add-product-form" onsubmit="addNewProduct(event)" class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-4 shadow-xl">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">ကုန်ပစ္စည်းအမည်</label>
-                    <input type="text" id="p-name" required placeholder="ဥပမာ - ကြက်ကြော်" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">စျေးနှုန်း (ကျပ်)</label>
-                    <input type="number" id="p-price" required placeholder="ဥပမာ - ၅၀၀၀" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">အခြေခံလက်ကျန်အရေအတွက်</label>
-                    <input type="number" id="p-stock" required placeholder="၅၀" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 cursor-pointer">
-                    ✨ ပစ္စည်းအသစ်စာရင်းသွင်းမည်
-                </button>
-            </form>
-        </div>
-
-        <div id="settings-view" class="view-section hidden p-4 space-y-4 pb-24">
-            <h3 class="text-sm font-semibold text-gray-400 flex items-center gap-2 uppercase tracking-wider mt-2">
-                ⚙️ စနစ် ဆက်တင်များ
-            </h3>
-            
-            <div class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-4 shadow-xl">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Supabase Project URL</label>
-                    <input type="text" id="set-sb-url" placeholder="https://xxx.supabase.co" class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Supabase Anon Key</label>
-                    <input type="password" id="set-sb-key" placeholder="eyJhbGciOi..." class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Google Sheet Webhook URL</label>
-                    <input type="text" id="set-sheet-url" placeholder="https://script.google.com/macros/s/..." class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Gemini API Key</label>
-                    <input type="password" id="set-gemini" placeholder="AIzaSy..." class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm">
-                </div>
-                <button onclick="saveSettings()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md active:scale-95 mt-2 cursor-pointer">
-                    💾 ဆက်တင်များအားလုံးသိမ်းဆည်းမည်
-                </button>
+            <!-- အဆုံးသတ် နာမည်ကို ပိုမို ထင်ရှားအောင် ပြင်ဆင်ထားသည် -->
+            <div class="mt-12 pt-6 border-t border-rose-100 flex flex-col items-end">
+                <p class="text-rose-400 font-['Playfair_Display'] italic text-lg">Forever Yours,</p>
+                <p class="font-['Dancing_Script'] text-5xl text-rose-600 mt-2 font-bold">Ko Ko</p>
             </div>
         </div>
+    </div>
 
-    </main>
-
-    <footer class="bg-[#131926]/95 border-t border-gray-800 backdrop-blur-md fixed bottom-0 left-0 right-0 p-2 z-50">
-        <div class="max-w-md mx-auto grid grid-cols-3 text-center">
-            <button id="tab-order" onclick="switchTab('order-view', 'tab-order')" class="flex flex-col items-center justify-center py-1 text-blue-500 transition active:scale-90 cursor-pointer">
-                <span class="text-xl">📋</span>
-                <span class="text-[10px] font-medium mt-1">အော်ဒါဇယား</span>
-            </button>
-            <button id="tab-product" onclick="switchTab('product-view', 'tab-product')" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
-                <span class="text-xl">📦</span>
-                <span class="text-[10px] font-medium mt-1">ပစ္စည်းစာရင်း</span>
-            </button>
-            <button id="tab-settings" onclick="switchTab('settings-view', 'tab-settings')" class="flex flex-col items-center justify-center py-1 text-gray-400 hover:text-white transition active:scale-90 cursor-pointer">
-                <span class="text-xl">⚙️</span>
-                <span class="text-[10px] font-medium mt-1">ဆက်တင်</span>
-            </button>
+    <!-- 3. FINAL QUESTION SECTION -->
+    <div class="py-24 flex flex-col items-center justify-center relative z-10 reveal">
+        <p class="text-4xl md:text-6xl font-['Dancing_Script'] text-rose-700 font-bold text-center px-4">Will you be my forever?</p>
+        <div class="mt-6 flex gap-2 text-rose-400">
+            <span>🤍</span><span>✨</span><span>🤍</span>
         </div>
-    </footer>
+    </div>
 
     <script>
-        let supabaseClient = null;
+        // Hearts Animation
+        const heartsContainer = document.getElementById('hearts-container');
+        const heartSymbols = ['❤️', '💖', '💕', '🌸', '✨'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 8 + 's';
+            heart.style.fontSize = Math.random() * 1 + 1 + 'rem';
+            heartsContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 13000);
+        }
+        setInterval(createHeart, 500);
 
-        function switchTab(viewId, tabId) {
-            const views = document.querySelectorAll('.view-section');
-            for(let i=0; i<views.length; i++) {
-                views[i].classList.add('hidden');
-            }
-            const targetView = document.getElementById(viewId);
-            if(targetView) targetView.classList.remove('hidden');
-
-            const tabs = ['tab-order', 'tab-product', 'tab-settings'];
-            for(let i=0; i<tabs.length; i++) {
-                const btn = document.getElementById(tabs[i]);
-                if(!btn) continue;
-                if (tabs[i] === tabId) {
-                    btn.classList.remove('text-gray-400');
-                    btn.classList.add('text-blue-500');
-                } else {
-                    btn.classList.remove('text-blue-500');
-                    btn.classList.add('text-gray-400');
+        // Scroll Reveal
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
                 }
             }
         }
+        window.addEventListener("scroll", reveal);
 
-        function startAppEngine() {
-            const url = localStorage.getItem("sb_url");
-            const key = localStorage.getItem("sb_key");
-            const sheet = localStorage.getItem("sheet_url");
-            const gemini = localStorage.getItem("gemini_key");
+        // Music Logic
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
 
-            if(url) document.getElementById("set-sb-url").value = url;
-            if(key) document.getElementById("set-sb-key").value = key;
-            if(sheet) document.getElementById("set-sheet-url").value = sheet;
-            if(gemini) document.getElementById("set-gemini").value = gemini;
-
-            if (url && key) {
-                try {
-                    if(typeof supabase === 'undefined') {
-                        throw new Error("Library မပွင့်ပါ။");
-                    }
-                    supabaseClient = supabase.createClient(url, key);
-                    updateStatus(true);
-                    loadOrders();
-                    loadProducts();
-                    listenRealtime();
-                } catch(e) {
-                    showConnectionError("စနစ်ချိတ်ဆက်မှု လွဲချော်နေပါသည်: " + e.message);
-                }
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.style.animation = "pulse 2s infinite";
             } else {
-                showConnectionError("ဆက်တင်ထဲတွင် URL နှင့် Key ချိတ်ဆက်ပေးရန် လိုအပ်ပါသည်။");
+                bgMusic.play().catch(e => console.log("Audio play failed:", e));
+                musicBtn.classList.add('playing');
+                musicBtn.style.animation = "spin 4s linear infinite";
             }
+            isPlaying = !isPlaying;
         }
 
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", startAppEngine);
-        } else {
-            startAppEngine();
-        }
-
-        // 🎯 တခြားသူများ နည်းပညာ မရိပ်မိစေရန် စာသားပြောင်းလဲထားသည့်အပိုင်း
-        function updateStatus(isOnline) {
-            const statusEl = document.getElementById("db-status");
-            if(!statusEl) return;
-            if(isOnline) {
-                statusEl.className = "bg-green-500/10 text-green-400 border border-green-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm";
-                statusEl.innerHTML = `<span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> System Active`;
-            } else {
-                statusEl.className = "bg-red-500/10 text-red-400 border border-red-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm";
-                statusEl.innerHTML = `<span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span> Offline`;
-            }
-        }
-
-        function showConnectionError(msg) {
-            updateStatus(false);
-            const errHtml = `
-                <div class="text-center py-8 px-4 space-y-4 bg-[#131926]/40 border border-dashed border-gray-800 rounded-2xl mx-2">
-                    <p class="text-sm text-amber-400 font-medium">⚠️ ${msg}</p>
-                    <button onclick="switchTab('settings-view', 'tab-settings')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 cursor-pointer">
-                        ⚙️ ဆက်တင်သို့တိုက်ရိုက်သွားပြီး API သော့များပြင်မည်
-                    </button>
-                </div>
-            `;
-            const orderContainer = document.getElementById("orders-container");
-            const productContainer = document.getElementById("products-container");
-            if(orderContainer) orderContainer.innerHTML = errHtml;
-            if(productContainer) productContainer.innerHTML = errHtml;
-        }
-
-        function saveSettings() {
-            localStorage.setItem("sb_url", document.getElementById("set-sb-url").value.trim());
-            localStorage.setItem("sb_key", document.getElementById("set-sb-key").value.trim());
-            localStorage.setItem("sheet_url", document.getElementById("set-sheet-url").value.trim());
-            localStorage.setItem("gemini_key", document.getElementById("set-gemini").value.trim());
-
-            alert("✅ ဆက်တင်များ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
-            window.location.reload();
-        }
-
-        async function loadOrders() {
-            if(!supabaseClient) return;
-            try {
-                const { data, error } = await supabaseClient.from('orders').select('*').order('id', { ascending: false });
-                if (error) throw error;
-
-                const acceptedOrders = data.filter(o => o.status === 'Accepted');
-                const revenue = acceptedOrders.reduce((sum, order) => sum + (order.total_price || 0), 0);
-                
-                document.getElementById("total-orders-count").innerText = `${data.length} ခု`;
-                document.getElementById("total-revenue").innerText = `${revenue.toLocaleString()} ကျပ်`;
-
-                const container = document.getElementById("orders-container");
-                if(data.length === 0) {
-                    container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">📥 ဝင်လာသော အော်ဒါမရှိသေးပါ။</p>`;
-                    return;
-                }
-
-                // 🎯 ဝင်လာသော အော်ဒါများတွင် နံပါတ်စဉ် (၁၊ ၂၊ ၃) အလိုအလျောက် တပ်ဆင်ပေးခြင်း
-                container.innerHTML = data.map((order, index) => `
-                    <div class="bg-[#131926] border border-gray-800 rounded-2xl p-4 space-y-3 shadow-xl">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="text-white font-bold text-base">${index + 1}။ ${order.customer_name}</h4>
-                                <p class="text-xs text-gray-400 mt-0.5">${order.phone}</p>
-                            </div>
-                            <span class="text-xs px-2.5 py-1 rounded-full font-medium ${
-                                order.status === 'Pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 
-                                order.status === 'Accepted' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-800 text-gray-400'
-                            }">${order.status}</span>
-                        </div>
-                        <div class="bg-[#0b0f19] border border-gray-800/60 rounded-xl p-3 text-sm space-y-2">
-                            <p class="text-gray-200 pl-2">• ${order.items}</p>
-                            <p class="text-xs text-green-400 font-medium pl-2">ကျသင့်ငွေ: ${(order.total_price || 0).toLocaleString()} ကျပ်</p>
-                            <p class="text-gray-300 flex items-start gap-1 text-xs mt-1">📍 လိပ်စာ: ${order.address || '-'}</p>
-                        </div>
-                        
-                        ${order.status === 'Pending' ? `
-                            <div class="grid grid-cols-3 gap-2 pt-1">
-                                <button onclick='acceptOrder(${JSON.stringify(order)})' class="col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition text-sm shadow-md active:scale-95 cursor-pointer">အော်ဒါလက်ခံမည်</button>
-                                <button onclick="updateOrderStatus(${order.id}, 'Rejected')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2 rounded-xl transition text-sm active:scale-95 cursor-pointer">ငြင်းပယ်ရန်</button>
-                            </div>
-                        ` : ''}
-                    </div>
-                `).join('');
-            } catch(e) {
-                showConnectionError("Database မှ အော်ဒါဆွဲမရပါ: " + e.message);
-            }
-        }
-
-        async function acceptOrder(order) {
-            const { error } = await supabaseClient.from('orders').update({ status: 'Accepted' }).eq('id', order.id);
-            if(error) return;
-
-            const sheetUrl = localStorage.getItem("sheet_url");
-            if (sheetUrl && sheetUrl.trim() !== "") {
-                const payload = {
-                    order_id: order.id,
-                    customer_name: order.customer_name,
-                    phone: order.phone,
-                    items: order.items,
-                    total_price: order.total_price,
-                    address: order.address,
-                    date: new Date().toLocaleString()
-                };
-
-                fetch(sheetUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                }).then(() => console.log("➡️ Sheets Synced."))
-                .catch(err => console.error("Sheets Error:", err));
-            }
-            loadOrders();
-        }
-
-        async function updateOrderStatus(id, newStatus) {
-            const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
-            if(!error) loadOrders();
-        }
-
-        async function loadProducts() {
-            if(!supabaseClient) return;
-            try {
-                const { data, error } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
-                if (error) throw error;
-
-                const container = document.getElementById("products-container");
-                if(data.length === 0) {
-                    container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">📦 ပစ္စည်းစာရင်း မရှိသေးပါ။ အောက်တွင် အသစ်ထည့်ပါ။</p>`;
-                    return;
-                }
-
-                // 🎯 ကုန်ပစ္စည်းစာရင်းများတွင် နံပါတ်စဉ် (၁၊ ၂၊ ၃) အော်တို ထည့်သွင်းပေးခြင်း
-                container.innerHTML = data.map((p, index) => `
-                    <div class="bg-[#131926] border border-gray-800 rounded-xl p-3.5 flex items-center justify-between shadow-md">
-                        <div class="flex items-center gap-3">
-                            <div class="text-sm font-bold text-blue-400 min-w-[24px] text-center">${index + 1}။</div>
-                            <div>
-                                <h4 class="text-white font-medium text-sm">${p.name}</h4>
-                                <p class="text-xs text-gray-400 mt-0.5">${p.price.toLocaleString()} ကျပ်</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold ${p.stock <= 5 ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}">လက်ကျန် ${p.stock}</span>
-                            <button onclick="editStockPrompt(${p.id}, '${p.name}', ${p.stock})" class="block text-xs text-blue-400 mt-2 ml-auto hover:underline cursor-pointer">✏️ ပြင်ရန်</button>
-                        </div>
-                    </div>
-                `).join('');
-            } catch(e) {
-                console.error(e);
-            }
-        }
-
-        async function addNewProduct(e) {
-            e.preventDefault();
-            if(!supabaseClient) return;
-
-            const name = document.getElementById("p-name").value.trim();
-            const price = parseInt(document.getElementById("p-price").value);
-            const stock = parseInt(document.getElementById("p-stock").value);
-
-            // 🎯 အီမိုဂျီမလိုဘဲ တိုက်ရိုက် သန့်သန့်ရှင်းရှင်း ထည့်သွင်းခြင်း
-            const { error } = await supabaseClient.from('products').insert([{ name, price, stock }]);
-            if(!error) {
-                document.getElementById("add-product-form").reset();
-                loadProducts();
-                alert("🎉 ကုန်ပစ္စည်းအသစ်ကို Database ထဲသို့ အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ!");
-            } else {
-                alert("❌ ပစ္စည်းထည့်ရတာ လွဲချော်သွားပါသည်: " + error.message);
-            }
-        }
-
-        async function editStockPrompt(id, name, currentStock) {
-            const newStock = prompt(`"${name}" ၏ လက်ကျန်အရေအတွက်ကို အသစ်ပြင်ဆင်ရန် ရိုက်ထည့်ပါ -`, currentStock);
-            if (newStock === null || newStock.trim() === "") return;
-            
-            const { error } = await supabaseClient.from('products').update({ stock: parseInt(newStock) }).eq('id', id);
-            if(!error) loadProducts();
-        }
-
-        function listenRealtime() {
-            if(!supabaseClient) return;
-            supabaseClient.channel('custom-all-channel')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => { loadOrders(); })
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => { loadProducts(); })
-            .subscribe();
+        // Tap to Reveal (Plays music and scrolls slightly)
+        function toggleMusicAndScroll() {
+            if(!isPlaying) toggleMusic();
+            window.scrollBy({ top: window.innerHeight / 2, behavior: 'smooth' });
         }
     </script>
 </body>
